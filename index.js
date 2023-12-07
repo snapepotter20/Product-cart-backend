@@ -10,6 +10,18 @@ const jwtKey = "ecomm";
 const app = express();
 
 app.use(express.json());
+
+const corsOptions = {
+  origin: 'https://product-cart-frontend.vercel.app/signup', // Replace with your frontend app URL
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  optionsSuccessStatus: 204,
+};
+app.options('*', cors(corsOptions));
+
+app.use(cors(corsOptions));
+
+
 app.use(cors());
 
 app.post("/register", async (req, res) => {
