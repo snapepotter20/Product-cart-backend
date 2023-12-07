@@ -17,7 +17,7 @@ app.post("/register", async (req, res) => {
   let result = await user.save();
   result = result.toObject();
   delete result.password;
-  Jwt.sign({ result }, jwtKey, (err, token) => {
+  Jwt.sign({ result }, jwtKey, { expiresIn: "24h" }, (err, token) => {
     if (err) res.send({ result: "Something went wrong" });
     res.send({ result, auth: token });
   });
