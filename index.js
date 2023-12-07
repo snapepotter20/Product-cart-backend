@@ -34,29 +34,17 @@ app.post("/register", async (req, res) => {
     res.send({ result, auth: token });
   });
 });
-app.post("/login", async (req, res) => {
-  console.log("Login request received:", req.body);
 
+app.post("/login", async (req, res) => {
   if (req.body.password && req.body.email) {
     let user = await User.findOne(req.body).select("-password");
-    console.log("User found:", user);
-
     if (user) {
       Jwt.sign({ user }, jwtKey, { expiresIn: "2h" }, (err, token) => {
-        if (err) {
-          console.error("Error signing JWT:", err);
-          return res.status(500).send({ result: "Internal Server Error" });
-        }
+        if (err) res.send({ result: "Something went wrong" });
         res.send({ user, auth: token });
       });
-    } else {
-      console.log("User not found");
-      res.send({ result: "User not found" });
-    }
-  } else {
-    console.log("Invalid request parameters");
-    res.send({ result: "User not found" });
-  }
+    } else res.send({ result: "User not found" });
+  } else res.send({ result: "User not found" });
 });
 
 
