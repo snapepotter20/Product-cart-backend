@@ -12,7 +12,7 @@ const app = express();
 app.use(express.json());
 
 const corsOptions = {
-  origin: '*', 
+  origin: 'http://localhost:3000', 
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
   optionsSuccessStatus: 204,
@@ -29,7 +29,7 @@ app.post("/register", async (req, res) => {
   let result = await user.save();
   result = result.toObject();
   delete result.password;
-  Jwt.sign({ result }, jwtKey, { expiresIn: "2h" }, (err, token) => {
+  Jwt.sign({ result }, jwtKey, { expiresIn: "24h" }, (err, token) => {
     if (err) res.send({ result: "Something went wrong" });
     res.send({ result, auth: token });
   });
@@ -39,7 +39,7 @@ app.post("/login", async (req, res) => {
   if (req.body.password && req.body.email) {
     let user = await User.findOne(req.body).select("-password");
     if (user) {
-      Jwt.sign({ user }, jwtKey, { expiresIn: "2h" }, (err, token) => {
+      Jwt.sign({ user }, jwtKey, { expiresIn: "24h" }, (err, token) => {
         if (err) res.send({ result: "Something went wrong" });
         res.send({ user, auth: token });
       });
